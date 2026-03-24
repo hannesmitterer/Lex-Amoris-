@@ -3,10 +3,9 @@
 import pytest
 
 from lex_amoris import LexAmoris, Principle
-from lex_amoris.core.principles import CORE_PRINCIPLES, BENEVOLENCE, DIGNITY
+from lex_amoris.core.principles import BENEVOLENCE, CORE_PRINCIPLES, DIGNITY
 from lex_amoris.euystacio import Euystacio
 from lex_amoris.utils.helpers import format_reflection, list_principles_summary
-
 
 # ── Principle tests ────────────────────────────────────────────────────────
 

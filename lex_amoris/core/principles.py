@@ -47,8 +47,7 @@ BENEVOLENCE = Principle(
 DIGNITY = Principle(
     name="Dignity",
     description=(
-        "Recognise and honour the intrinsic worth of every human being, "
-        "regardless of circumstance."
+        "Recognise and honour the intrinsic worth of every human being, regardless of circumstance."
     ),
     keywords=["worth", "respect", "dignity", "value", "person", "human"],
 )
@@ -67,9 +66,7 @@ COMPASSION = Principle(
 
 TRUTH = Principle(
     name="Truth",
-    description=(
-        "Speak and act with honesty; authentic love cannot be grounded in deception."
-    ),
+    description=("Speak and act with honesty; authentic love cannot be grounded in deception."),
     keywords=["honest", "truth", "sincere", "transparent", "open", "trust"],
 )
 

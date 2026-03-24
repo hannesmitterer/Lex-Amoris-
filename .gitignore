@@ -17,6 +17,10 @@ env/
 # Pytest
 .pytest_cache/
 
+# MkDocs build output
+site/
+_site/
+
 # Editors
 .idea/
 .vscode/
