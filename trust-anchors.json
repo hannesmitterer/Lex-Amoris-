@@ -1,0 +1,91 @@
+{
+  "name": "Trust Anchors Registry",
+  "version": "1.0.0",
+  "description": "Distributed registry of trusted entities and validation authorities for LexAmoris",
+  
+  "trustServiceProviders": [
+    {
+      "name": "LexAmoris Foundation",
+      "tspId": "LA-TSP-001",
+      "country": "International",
+      "status": "active",
+      "services": [
+        {
+          "serviceType": "signature-validation",
+          "status": "active",
+          "publicKey": "ed25519:AAAA...placeholder"
+        },
+        {
+          "serviceType": "timestamp-authority",
+          "status": "active",
+          "publicKey": "ed25519:BBBB...placeholder"
+        }
+      ]
+    },
+    {
+      "name": "Community Validation Network",
+      "tspId": "LA-TSP-002",
+      "country": "Distributed",
+      "status": "active",
+      "services": [
+        {
+          "serviceType": "covenant-validation",
+          "status": "active",
+          "publicKey": "ed25519:CCCC...placeholder"
+        }
+      ]
+    }
+  ],
+  
+  "rootCertificates": [
+    {
+      "issuer": "LexAmoris Root CA",
+      "fingerprint": "sha256:0000...placeholder",
+      "validFrom": "2026-01-01T00:00:00Z",
+      "validUntil": "2036-01-01T00:00:00Z",
+      "algorithm": "Ed25519",
+      "purpose": "root-trust-anchor"
+    }
+  ],
+  
+  "revocationLists": [
+    {
+      "type": "CRL",
+      "url": "https://crl.lexamoris.org/latest.crl",
+      "updateFrequency": "daily"
+    },
+    {
+      "type": "OCSP",
+      "url": "https://ocsp.lexamoris.org",
+      "updateFrequency": "realtime"
+    }
+  ],
+  
+  "ipfsAnchoring": {
+    "enabled": true,
+    "implementation": "kubo",
+    "version": "0.28.0",
+    "note": "Using Kubo (Go IPFS implementation) v0.28.0",
+    "cidVerification": "mandatory",
+    "pinningStrategy": "multi-node"
+  },
+  
+  "validation": {
+    "method": "distributed-consensus",
+    "threshold": 0.67,
+    "validators": [
+      "validator-1.lexamoris.org",
+      "validator-2.lexamoris.org",
+      "validator-3.lexamoris.org"
+    ],
+    "challengeResponse": true
+  },
+  
+  "metadata": {
+    "schema": "https://lexamoris.org/schemas/trust-anchors/v1",
+    "compliance": "ETSI-119612",
+    "maintainer": "LexAmoris Network",
+    "lastUpdated": "2026-03-24",
+    "ipfsCid": "placeholder-will-be-generated"
+  }
+}

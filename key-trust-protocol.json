@@ -1,0 +1,63 @@
+{
+  "name": "Key Trust Protocol",
+  "version": "1.0.0",
+  "description": "Cryptographic trust and key management protocol based on ETSI EN 319 612",
+  
+  "standard": {
+    "name": "ETSI EN 319 612",
+    "version": "v1.1.1",
+    "description": "Electronic Signatures and Infrastructures (ESI); Trusted Lists",
+    "url": "https://www.etsi.org/deliver/etsi_en/319600_319699/319612/01.01.01_60/en_319612v010101p.pdf"
+  },
+  
+  "trustFramework": {
+    "model": "web-of-trust",
+    "centralized": false,
+    "hierarchical": false,
+    "distributed": true
+  },
+  
+  "keyManagement": {
+    "algorithm": "Ed25519",
+    "keyDerivation": "BIP32-Ed25519",
+    "storage": "encrypted-local-keystore",
+    "backup": "distributed-secret-sharing"
+  },
+  
+  "signatures": {
+    "format": "JAdES",
+    "note": "JSON Advanced Electronic Signatures (compatible with ETSI EN 319 182)",
+    "encoding": "base64url",
+    "timestamping": "required",
+    "counterSignature": "optional"
+  },
+  
+  "trustAnchors": {
+    "source": "trust-anchors.json",
+    "validation": "continuous",
+    "revocationCheck": "mandatory",
+    "ocspStapling": true
+  },
+  
+  "certificatePolicy": {
+    "selfSigned": false,
+    "requireChainValidation": true,
+    "minKeyLength": 256,
+    "allowedAlgorithms": ["Ed25519", "ECDSA-P256", "RSA-4096"],
+    "expirationWarning": "30-days"
+  },
+  
+  "compliance": {
+    "etsi": "EN 319 612",
+    "eidas": "qualified-level",
+    "bioEthical": "full-sovereignty",
+    "auditLog": "immutable-ipfs"
+  },
+  
+  "metadata": {
+    "schema": "https://lexamoris.org/schemas/key-trust-protocol/v1",
+    "compliance": "ETSI-119612",
+    "maintainer": "LexAmoris Network",
+    "lastUpdated": "2026-03-24"
+  }
+}

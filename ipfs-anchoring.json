@@ -1,0 +1,84 @@
+{
+  "name": "IPFS Anchoring Configuration",
+  "version": "1.0.0",
+  "description": "Distributed storage and replication configuration for LexAmoris compliance artifacts",
+  
+  "ipfs": {
+    "implementation": "kubo",
+    "version": "0.28.0",
+    "note": "Using Kubo (Go IPFS implementation) v0.28.0",
+    "protocols": ["CIDv1", "Bitswap", "libp2p"],
+    "api": {
+      "version": "v0",
+      "endpoint": "/api/v0"
+    }
+  },
+  
+  "pinning": {
+    "strategy": "multi-node-redundancy",
+    "minReplication": 3,
+    "preferredProviders": [
+      "ipfs.io",
+      "pinata.cloud",
+      "infura.io"
+    ],
+    "backupProviders": [
+      "self-hosted-node-1",
+      "self-hosted-node-2"
+    ]
+  },
+  
+  "criticalArtifacts": [
+    {
+      "artifact": "living-covenant.json",
+      "priority": "critical",
+      "immutable": true,
+      "replicationTarget": 5
+    },
+    {
+      "artifact": "trust-anchors.json",
+      "priority": "critical",
+      "immutable": true,
+      "replicationTarget": 5
+    },
+    {
+      "artifact": "key-trust-protocol.json",
+      "priority": "high",
+      "immutable": true,
+      "replicationTarget": 3
+    },
+    {
+      "artifact": "g-csi-compliance.json",
+      "priority": "high",
+      "immutable": false,
+      "replicationTarget": 3
+    },
+    {
+      "artifact": "nsr-enforcement.json",
+      "priority": "high",
+      "immutable": false,
+      "replicationTarget": 3
+    }
+  ],
+  
+  "verification": {
+    "hashAlgorithm": "sha256",
+    "signatureRequired": true,
+    "continuousValidation": true,
+    "checksumVerification": "per-retrieval"
+  },
+  
+  "resilience": {
+    "autoRepinning": true,
+    "healthChecks": "hourly",
+    "failoverAutomatic": true,
+    "garbageCollection": "disabled-for-critical"
+  },
+  
+  "metadata": {
+    "schema": "https://lexamoris.org/schemas/ipfs-anchoring/v1",
+    "compliance": "IPFS-Anchoring-v1",
+    "maintainer": "LexAmoris Network",
+    "lastUpdated": "2026-03-24"
+  }
+}

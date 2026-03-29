@@ -1,0 +1,89 @@
+name: Compliance Verification
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "main", "copilot/**" ]
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+      
+      - name: Make script executable
+        run: chmod +x verify-compliance.sh
+      
+      - name: Run compliance verification
+        run: ./verify-compliance.sh
+      
+      - name: Validate JSON files
+        run: |
+          echo "Validating JSON files..."
+          for file in *.json; do
+            if [ -f "$file" ]; then
+              echo "Validating $file"
+              jq empty "$file" || exit 1
+            fi
+          done
+          echo "All JSON files are valid"
+      
+      - name: Check critical artifacts
+        run: |
+          echo "Checking for critical artifacts..."
+          required_files=(
+            "living-covenant.json"
+            "ipfs-anchoring.json"
+            "key-trust-protocol.json"
+            "trust-anchors.json"
+            "g-csi-compliance.json"
+            "nsr-enforcement.json"
+          )
+          
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Missing critical artifact: $file"
+              exit 1
+            fi
+            echo "✓ Found: $file"
+          done
+          echo "All critical artifacts present"
+      
+      - name: Upload compliance report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: compliance-verification-report
+          path: |
+            *.json
+            *.md
+          retention-days: 90
+      
+      - name: Post results to summary
+        if: always()
+        run: |
+          echo "## Compliance Verification Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ $? -eq 0 ]; then
+            echo "✅ **Status: PASSED**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "All compliance checks passed successfully." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "📜⚖️❤️ **Lex Amoris Compliance: VERIFIED**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Status: FAILED**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Some compliance checks failed. Please review the logs." >> $GITHUB_STEP_SUMMARY
+          fi

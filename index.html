@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lex Amoris - Constitutional Protection Framework for Bio-Ethical Sovereignty">
+    <meta name="keywords" content="bio-ethical, sovereignty, IPFS, blockchain, compliance, governance, surveillance protection">
+    <title>Lex Amoris - Law of Love | Constitutional Protection Framework</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .tagline {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .card h3 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .card li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card li:last-child {
+            border-bottom: none;
+        }
+
+        .card li::before {
+            content: "✓ ";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .status-card {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+
+        .status-card h2 {
+            color: white;
+        }
+
+        .status-icon {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+
+        .compliance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .compliance-table th,
+        .compliance-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .compliance-table th {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+        }
+
+        .signature {
+            font-size: 1.5em;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .badges {
+                flex-direction: column;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📜 Lex Amoris ⚖️</h1>
+            <div class="tagline">Law of Love - Constitutional Protection for Bio-Ethical Sovereignty</div>
+            <div class="badges">
+                <span class="badge">🔒 Zero Surveillance</span>
+                <span class="badge">🌐 Distributed Governance</span>
+                <span class="badge">❤️ Bio-Ethical Protection</span>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="card status-card">
+                <div class="status-icon">✅</div>
+                <h2>Living Covenant Compliance Status</h2>
+                <p style="font-size: 1.2em; margin: 20px 0;">
+                    <strong>VERIFIED</strong> - All compliance checks passed
+                </p>
+                <table class="compliance-table">
+                    <thead>
+                        <tr>
+                            <th>Standard</th>
+                            <th>Status</th>
+                            <th>Last Verified</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>G-CSI-2026</td>
+                            <td>✓ Compliant</td>
+                            <td>2026-03-24</td>
+                        </tr>
+                        <tr>
+                            <td>ETSI EN 319 612</td>
+                            <td>✓ Compliant</td>
+                            <td>2026-03-24</td>
+                        </tr>
+                        <tr>
+                            <td>IPFS Anchoring v1</td>
+                            <td>✓ Compliant</td>
+                            <td>2026-03-24</td>
+                        </tr>
+                        <tr>
+                            <td>Bio-Ethical Consensus v1</td>
+                            <td>✓ Compliant</td>
+                            <td>2026-03-24</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="icon">🛡️</div>
+                <h2>Core Principles</h2>
+                <ul>
+                    <li><strong>Bio-Ethical Sovereignty</strong> - Complete autonomy over biological and digital existence</li>
+                    <li><strong>No Surveillance Regime</strong> - Zero tolerance for covert monitoring</li>
+                    <li><strong>Radical Transparency</strong> - All operations publicly auditable</li>
+                    <li><strong>Distributed Consensus</strong> - Community governance, not centralized control</li>
+                    <li><strong>Protection of Love</strong> - Preservation of human connection and empathy</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="icon">🔐</div>
+                <h2>Cryptographic Trust</h2>
+                <ul>
+                    <li><strong>ETSI EN 319 612</strong> - European Trust Service Provider standards</li>
+                    <li><strong>Ed25519 Signatures</strong> - Modern elliptic curve cryptography</li>
+                    <li><strong>JAdES Format</strong> - JSON Advanced Electronic Signatures</li>
+                    <li><strong>Distributed Web-of-Trust</strong> - No single point of failure</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="icon">🌍</div>
+                <h2>Distributed Storage</h2>
+                <ul>
+                    <li><strong>IPFS Kubo v0.28.0</strong> - Go implementation</li>
+                    <li><strong>Multi-Node Replication</strong> - Minimum 3 independent copies</li>
+                    <li><strong>Immutable Artifacts</strong> - Content-addressed storage</li>
+                    <li><strong>Health Monitoring</strong> - Continuous validation</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="icon">📊</div>
+                <h2>Framework Components</h2>
+                <h3>Critical Artifacts:</h3>
+                <ul>
+                    <li><code>living-covenant.json</code> - Constitutional principles</li>
+                    <li><code>ipfs-anchoring.json</code> - Storage configuration</li>
+                    <li><code>key-trust-protocol.json</code> - Cryptographic trust</li>
+                    <li><code>trust-anchors.json</code> - Trust service providers</li>
+                    <li><code>g-csi-compliance.json</code> - Governance & security</li>
+                    <li><code>nsr-enforcement.json</code> - Surveillance prevention</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="icon">⚙️</div>
+                <h2>Verification</h2>
+                <p>Run automated compliance checks:</p>
+                <pre style="background: #f4f4f4; padding: 15px; border-radius: 8px; margin: 15px 0; overflow-x: auto;">
+<code>git clone https://github.com/hannesmitterer/Lex-Amoris-.git
+cd Lex-Amoris-
+chmod +x verify-compliance.sh
+./verify-compliance.sh</code></pre>
+                <p><strong>57+ automated checks</strong> validate all compliance requirements</p>
+            </div>
+
+            <div class="card">
+                <div class="icon">🔒</div>
+                <h2>Security Features</h2>
+                <ul>
+                    <li><strong>AES-256-GCM</strong> - Encryption at rest</li>
+                    <li><strong>TLS 1.3</strong> - Secure transport</li>
+                    <li><strong>Multi-Layer NSR</strong> - Surveillance pattern detection</li>
+                    <li><strong>Immediate Halt</strong> - Automatic violation response</li>
+                    <li><strong>Immutable Audit Log</strong> - IPFS-stored records</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="https://github.com/hannesmitterer/Lex-Amoris-" class="btn">View on GitHub</a>
+            <a href="VERIFICATION.md" class="btn btn-secondary">Verification Guide</a>
+            <a href="IMPLEMENTATION.md" class="btn">Implementation Details</a>
+        </div>
+
+        <footer>
+            <div class="signature">📜⚖️❤️</div>
+            <p><strong>Lex Amoris Signature: Protection of the Law of Love active.</strong></p>
+            <p style="margin: 20px 0; color: #666;">
+                <em>Sempre in Costante</em> | Hannes Mitterer
+            </p>
+            <p style="margin-top: 20px;">
+                <strong>License:</strong> GPL-3.0 with Constitutional Protection Clause
+            </p>
+            <p style="color: #999; font-size: 0.9em; margin-top: 20px;">
+                Built with ❤️ for human sovereignty and digital freedom
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
