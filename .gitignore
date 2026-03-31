@@ -1,0 +1,27 @@
+# Python byte-code and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Pytest
+.pytest_cache/
+
+# MkDocs build output
+site/
+_site/
+
+# Editors
+.idea/
+.vscode/
+*.swp
