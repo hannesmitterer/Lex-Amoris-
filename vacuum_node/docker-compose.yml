@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  node-a:
+    build: .
+    container_name: vacuum-node-a
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_NAME=node-a
+    volumes:
+      - ./keys-a:/app/keys:ro
+    networks:
+      - vacuum-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  node-b:
+    build: .
+    container_name: vacuum-node-b
+    ports:
+      - "8001:8000"
+    environment:
+      - NODE_NAME=node-b
+    volumes:
+      - ./keys-b:/app/keys:ro
+    networks:
+      - vacuum-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  node-c:
+    build: .
+    container_name: vacuum-node-c
+    ports:
+      - "8002:8000"
+    environment:
+      - NODE_NAME=node-c
+    volumes:
+      - ./keys-c:/app/keys:ro
+    networks:
+      - vacuum-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  vacuum-net:
+    driver: bridge
