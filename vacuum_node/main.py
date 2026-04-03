@@ -6,15 +6,27 @@ Provides endpoints for:
 - /attest: Verify another node's result
 - /peers: Get list of peer nodes
 - /consensus: Aggregate results from multiple nodes
+- /decision: Robust decision-making with certification (NEW)
 """
 import json
 from pathlib import Path
 
 import numpy as np
 import requests
+from fastapi import FastAPI, HTTPException
+
+from consensus import (
+    append_block,
+    get_block,
+    get_chain,
+    get_reputation,
+    majority_consensus,
+    update_reputation,
+    verify_chain,
+    weighted_consensus,
+)
 from crypto import hash_result, sign_result, verify_signature
 from fairness import demographic_parity
-from fastapi import FastAPI, HTTPException
 from model import predict
 from verify import check_constraint
 
@@ -45,8 +57,16 @@ def root():
     """Root endpoint - node info."""
     return {
         "service": "Vacuum Bridge Node",
-        "version": "1.0.0",
-        "endpoints": ["/evaluate", "/attest", "/peers", "/consensus"],
+        "version": "2.0.0",
+        "endpoints": [
+            "/evaluate",
+            "/attest",
+            "/peers",
+            "/consensus",
+            "/decision",
+            "/chain",
+            "/reputation",
+        ],
     }
 
 
@@ -222,12 +242,159 @@ def consensus(data: dict):
         raise HTTPException(status_code=500, detail=f"Consensus error: {e}")
 
 
+@app.post("/decision")
+def decision(data: dict):
+    """
+    Make a robust decision with majority voting and certification.
+
+    This endpoint:
+    1. Queries all peer nodes
+    2. Applies majority consensus (tolerates divergent nodes)
+    3. Creates immutable block in chain
+    4. Returns verifiable certificate
+
+    Expected input: Same as /evaluate endpoint
+
+    Returns:
+    {
+        "decision": {
+            "consensus_hash": "...",
+            "agreement_ratio": 0.66,
+            "is_consensus": true,
+            "vote_counts": {...}
+        },
+        "certificate": {
+            "block": {...},
+            "responses": [...],
+            "weighted_result": {...}
+        }
+    }
+    """
+    try:
+        responses = []
+        node_ids = []
+
+        # Query each peer
+        for peer in PEERS:
+            try:
+                r = requests.post(f"{peer}/evaluate", json=data, timeout=10)
+                if r.status_code == 200:
+                    response_data = r.json()
+                    responses.append({"peer": peer, "response": response_data})
+                    node_ids.append(peer)
+                else:
+                    responses.append(
+                        {"peer": peer, "error": f"HTTP {r.status_code}", "response": None}
+                    )
+            except Exception as e:
+                responses.append({"peer": peer, "error": str(e), "response": None})
+
+        # Get local result
+        local_result = evaluate(data)
+        responses.append({"peer": "local", "response": local_result})
+        node_ids.append("local")
+
+        # Apply majority consensus
+        consensus_result = majority_consensus(responses)
+
+        # Apply weighted consensus (reputation-based)
+        best_hash, weights = weighted_consensus(responses, node_ids)
+
+        # Create certificate block
+        block = append_block(
+            data=data,
+            hash_value=consensus_result["consensus_hash"],
+            metadata={
+                "agreement_ratio": consensus_result["agreement_ratio"],
+                "is_consensus": consensus_result["is_consensus"],
+                "weighted_hash": best_hash,
+                "node_count": len(node_ids),
+            },
+        )
+
+        return {
+            "decision": consensus_result,
+            "certificate": {
+                "block": block,
+                "responses": responses,
+                "weighted_result": {"best_hash": best_hash, "weights": weights},
+            },
+            "status": "certified" if consensus_result["is_consensus"] else "no_consensus",
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Decision error: {e}")
+
+
+@app.get("/chain")
+def get_blockchain():
+    """
+    Get the complete blockchain.
+
+    Returns all blocks in chronological order.
+    """
+    is_valid, message = verify_chain()
+    return {"chain": get_chain(), "length": len(get_chain()), "valid": is_valid, "message": message}
+
+
+@app.get("/chain/{index}")
+def get_blockchain_block(index: int):
+    """
+    Get a specific block by index.
+
+    Args:
+        index: Block index (0-based)
+    """
+    block = get_block(index)
+    if block is None:
+        raise HTTPException(status_code=404, detail=f"Block {index} not found")
+    return block
+
+
+@app.get("/reputation")
+def get_all_reputation():
+    """Get reputation scores for all nodes."""
+    from consensus import REPUTATION
+
+    return {"reputation": REPUTATION}
+
+
+@app.get("/reputation/{node_id:path}")
+def get_node_reputation(node_id: str):
+    """Get reputation score for a specific node."""
+    score = get_reputation(node_id)
+    return {"node_id": node_id, "reputation": score}
+
+
+@app.post("/reputation/{node_id:path}")
+def set_node_reputation(node_id: str, data: dict):
+    """
+    Update reputation score for a node.
+
+    Input: {"score": 0.0-1.0}
+    """
+    if "score" not in data:
+        raise HTTPException(status_code=400, detail="Missing 'score' field")
+
+    try:
+        score = float(data["score"])
+        update_reputation(node_id, score)
+        return {"node_id": node_id, "reputation": score, "updated": True}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
 @app.get("/health")
 def health():
     """Health check endpoint."""
     keys_exist = PRIVATE_KEY_PATH.exists() and PUBLIC_KEY_PATH.exists()
+    chain = get_chain()
+    chain_valid, _ = verify_chain()
+
     return {
         "status": "healthy",
         "keys_configured": keys_exist,
         "peers_configured": len(PEERS),
+        "blockchain_length": len(chain),
+        "blockchain_valid": chain_valid,
     }
