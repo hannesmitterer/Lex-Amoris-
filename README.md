@@ -59,6 +59,50 @@ tests/
 
 ---
 
+## Vacuum Bridge Network
+
+The **Vacuum Bridge Network** is a practical implementation of fairness-as-infrastructure,
+providing a distributed verification system for AI decision-making with mathematical
+fairness guarantees and cryptographic validation.
+
+### Features
+
+- 🤖 **Distributed Nodes**: Multi-node network with independent verification
+- ⚖️ **Fairness Constraints**: Demographic parity checking with configurable thresholds
+- 🔐 **Cryptographic Validation**: RSA signatures and SHA256 hashing
+- 🤝 **Consensus Mechanism**: Deterministic agreement through hash comparison
+- 📦 **Docker Ready**: Complete containerization with docker-compose
+
+### Quick Start
+
+```bash
+cd vacuum_node
+./generate-keys.sh
+docker-compose up --build
+```
+
+Then test the network:
+
+```bash
+python test_network.py
+```
+
+See [`vacuum_node/QUICKSTART.md`](vacuum_node/QUICKSTART.md) for detailed instructions.
+
+### What It Does
+
+The Vacuum Bridge Network demonstrates:
+
+1. **Mathematical Fairness**: Verifies demographic parity constraints
+2. **Cryptographic Proof**: Signs and verifies results with RSA
+3. **Distributed Consensus**: Multiple nodes agree on outcomes
+4. **Transparency**: All operations are auditable and deterministic
+
+This is a **working implementation**, not a prototype. The network runs, verifies,
+and produces signed certificates that prove fairness constraints were met.
+
+---
+
 ## Running Tests
 
 ```bash
