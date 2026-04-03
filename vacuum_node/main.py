@@ -312,12 +312,34 @@ def decision(data: dict):
             },
         )
 
+        # Optional: Anchor to IPFS if available
+        ipfs_cid = None
+        try:
+            from ipfs_anchor import anchor_ipfs
+
+            certificate_data = {
+                "decision": consensus_result,
+                "certificate": {
+                    "block": block,
+                    "responses": responses,
+                    "weighted_result": {"best_hash": best_hash, "weights": weights},
+                },
+            }
+            ipfs_cid = anchor_ipfs(certificate_data)
+            if ipfs_cid:
+                block["metadata"]["ipfs_cid"] = ipfs_cid
+        except ImportError:
+            pass  # IPFS support not available
+        except Exception:
+            pass  # IPFS anchoring failed, continue without it
+
         return {
             "decision": consensus_result,
             "certificate": {
                 "block": block,
                 "responses": responses,
                 "weighted_result": {"best_hash": best_hash, "weights": weights},
+                "ipfs_cid": ipfs_cid,
             },
             "status": "certified" if consensus_result["is_consensus"] else "no_consensus",
         }

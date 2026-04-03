@@ -1,6 +1,17 @@
 # Vacuum Bridge Network
 
-A distributed network of verification nodes implementing fairness constraints with cryptographic validation.
+A distributed network of verification nodes implementing fairness constraints with cryptographic validation and robust consensus.
+
+## Version 2.0 - Robust Consensus
+
+**New in v2.0:**
+- 🎯 **Majority Voting** - Tolerates divergent/failed nodes (>50% agreement)
+- ⭐ **Reputation Layer** - Weighted consensus based on node trustworthiness
+- ⛓️ **Blockchain Log** - Immutable append-only decision history
+- 📜 **Certified Decisions** - Verifiable, auditable certificates
+- 🌐 **IPFS Anchoring** - Optional public immutable storage
+
+See [CONSENSUS.md](CONSENSUS.md) for detailed documentation on robust consensus mechanisms.
 
 ## Architecture
 
@@ -9,7 +20,8 @@ Each node in the network is a FastAPI service that:
 - Verifies fairness constraints (demographic parity)
 - Signs results with RSA cryptography
 - Can attest to other nodes' results
-- Participates in consensus through hash comparison
+- Participates in majority-vote consensus
+- Records decisions in blockchain log
 
 ## Project Structure
 
@@ -109,11 +121,13 @@ Expected response:
 
 ## API Endpoints
 
+### Core Endpoints (v1.0)
+
 ### GET /
 Basic node information
 
 ### GET /health
-Health check with key and peer status
+Health check with key, peer, and blockchain status
 
 ### GET /peers
 List of configured peer nodes
@@ -146,38 +160,55 @@ Run prediction with fairness verification
 ### POST /attest
 Verify another node's signed result
 
-**Input:**
-```json
-{
-  "result": {...},
-  "signature": "hex_signature",
-  "public_key": "pem_key"
-}
-```
-
-**Output:**
-```json
-{
-  "valid_signature": true,
-  "hash": "sha256_hash"
-}
-```
-
 ### POST /consensus
-Aggregate results from all peers
+Aggregate results from all peers (simple all-match consensus)
+
+### New Endpoints (v2.0)
+
+### POST /decision 🆕
+**Robust decision-making with majority voting and certification**
+
+This is the primary endpoint for production use.
 
 **Input:** Same as `/evaluate`
 
 **Output:**
 ```json
 {
-  "agreement": true,
-  "hashes": ["hash1", "hash2", "hash3"],
-  "responses": [...],
-  "local_result": {...},
-  "consensus_count": 3
+  "decision": {
+    "consensus_hash": "abc123...",
+    "agreement_ratio": 0.67,
+    "is_consensus": true,
+    "vote_counts": {"abc123...": 2, "xyz789...": 1},
+    "total_votes": 3
+  },
+  "certificate": {
+    "block": {
+      "index": 0,
+      "timestamp": 1710000000.123,
+      "hash": "abc123...",
+      "prev_hash": "genesis",
+      "metadata": {...}
+    },
+    "responses": [...],
+    "weighted_result": {...},
+    "ipfs_cid": "Qm..."
+  },
+  "status": "certified"
 }
 ```
+
+### GET /chain 🆕
+Get the complete blockchain of all decisions
+
+### GET /chain/{index} 🆕
+Get a specific block by index
+
+### GET /reputation 🆕
+Get reputation scores for all nodes
+
+### POST /reputation/{node_id} 🆕
+Update reputation score for a node
 
 ## Local Development
 
