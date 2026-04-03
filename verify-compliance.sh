@@ -15,8 +15,8 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Counters - initialized to 1 to avoid arithmetic issues with set -e
-PASS=1
+# Counters - initialized to 0
+PASS=0
 FAIL=0
 WARN=0
 
@@ -308,17 +308,17 @@ verify_cross_references() {
     if [ "$HAS_JQ" = true ] && [ -f "ipfs-anchoring.json" ]; then
         local artifact_count
         artifact_count=$(jq '.criticalArtifacts | length' ipfs-anchoring.json 2>/dev/null || echo "0")
-        if [ "$artifact_count" -ge 5 ]; then
+        if [ "$artifact_count" -ge 6 ]; then
             print_pass "IPFS anchoring references sufficient critical artifacts ($artifact_count)"
         else
-            print_fail "IPFS anchoring should reference at least 5 critical artifacts (found $artifact_count)"
+            print_fail "IPFS anchoring should reference at least 6 critical artifacts (found $artifact_count)"
         fi
     fi
     
     # Verify g-csi-compliance.json is in critical artifacts list
     if [ "$HAS_JQ" = true ] && [ -f "ipfs-anchoring.json" ]; then
         local has_gcsi
-        has_gcsi=$(jq '.criticalArtifacts[] | select(.artifact == "g-csi-compliance.json")' ipfs-anchoring.json 2>/dev/null)
+        has_gcsi=$(jq '.criticalArtifacts[] | select(.artifact == "g-csi-compliance.json")' ipfs-anchoring.json 2>/dev/null || echo "")
         if [ -n "$has_gcsi" ]; then
             print_pass "g-csi-compliance.json is in critical artifacts list"
         else
@@ -329,7 +329,7 @@ verify_cross_references() {
     # Verify trust-anchors references IPFS
     if [ "$HAS_JQ" = true ] && [ -f "trust-anchors.json" ]; then
         local has_ipfs
-        has_ipfs=$(jq -r '.ipfsAnchoring.enabled' trust-anchors.json 2>/dev/null)
+        has_ipfs=$(jq -r '.ipfsAnchoring.enabled' trust-anchors.json 2>/dev/null || echo "")
         if [ "$has_ipfs" = "true" ]; then
             print_pass "Trust anchors has IPFS anchoring enabled"
         else
@@ -340,7 +340,7 @@ verify_cross_references() {
     # Verify key-trust-protocol references trust-anchors
     if [ "$HAS_JQ" = true ] && [ -f "key-trust-protocol.json" ]; then
         local has_trust_ref
-        has_trust_ref=$(jq -r '.trustAnchors.source' key-trust-protocol.json 2>/dev/null)
+        has_trust_ref=$(jq -r '.trustAnchors.source' key-trust-protocol.json 2>/dev/null || echo "")
         if [ "$has_trust_ref" = "trust-anchors.json" ]; then
             print_pass "Key trust protocol references trust-anchors.json"
         else
@@ -356,11 +356,8 @@ verify_cross_references() {
 print_summary() {
     print_header "Verification Summary"
     
-    # Adjust for initial value of 1
-    local actual_pass=$((PASS - 1))
-    
     echo ""
-    echo -e "${GREEN}✓ Passed:${NC}  $actual_pass"
+    echo -e "${GREEN}✓ Passed:${NC}  $PASS"
     echo -e "${RED}✗ Failed:${NC}  $FAIL"
     echo -e "${YELLOW}⚠ Warnings:${NC} $WARN"
     echo ""

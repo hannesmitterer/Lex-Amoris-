@@ -76,7 +76,7 @@ jobs:
         run: |
           echo "## Compliance Verification Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          if [ $? -eq 0 ]; then
+          if [ "${{ job.status }}" = "success" ]; then
             echo "✅ **Status: PASSED**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "All compliance checks passed successfully." >> $GITHUB_STEP_SUMMARY

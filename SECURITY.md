@@ -9,8 +9,7 @@ The Lex Amoris project takes security seriously. We appreciate your efforts to r
 **DO NOT** open public issues for security vulnerabilities.
 
 Instead, please report security issues via:
-1. **GitHub Security Advisories**: Use the "Security" tab in the repository
-2. **Direct Contact**: Open an issue with title "SECURITY REPORT REQUEST" and we'll provide private communication channel
+1. **GitHub Security Advisories**: Use the "Security" tab in the repository to privately report vulnerabilities
 
 ### What to Include
 

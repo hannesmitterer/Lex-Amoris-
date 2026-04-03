@@ -36,6 +36,12 @@
       "replicationTarget": 5
     },
     {
+      "artifact": "ipfs-anchoring.json",
+      "priority": "critical",
+      "immutable": true,
+      "replicationTarget": 5
+    },
+    {
       "artifact": "trust-anchors.json",
       "priority": "critical",
       "immutable": true,

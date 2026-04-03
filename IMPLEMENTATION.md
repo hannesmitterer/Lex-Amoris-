@@ -181,13 +181,13 @@ The `verify-compliance.sh` script validates:
 
 ### Test Coverage
 
-The verification script performs **57+ checks** across:
+The verification script performs a comprehensive set of checks across:
 - File existence validation (6 checks)
 - JSON structure validation (6 checks)
-- Field presence validation (28+ checks)
+- Field presence validation (20+ checks)
 - Cross-reference validation (4 checks)
 - Numeric constraint validation (3+ checks)
-- Standard compliance validation (10+ checks)
+- Standard compliance validation (several checks)
 
 ## Deployment
 

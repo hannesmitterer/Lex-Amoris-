@@ -17,7 +17,7 @@ All contributions must align with the Living Covenant principles:
 ### 1. Fork and Clone
 
 ```bash
-git fork https://github.com/hannesmitterer/Lex-Amoris-.git
+# First, fork the repository on GitHub, then:
 git clone https://github.com/YOUR-USERNAME/Lex-Amoris-.git
 cd Lex-Amoris-
 ```

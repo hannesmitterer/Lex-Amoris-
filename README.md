@@ -137,7 +137,7 @@ apk add jq
 
 ### Verification
 
-- **`verify-compliance.sh`**: Automated validation script (57+ checks)
+- **`verify-compliance.sh`**: Automated validation script (40+ checks)
 - **Exit Code 0**: All checks passed
 - **Exit Code 1**: Failures detected (requires remediation)
 
