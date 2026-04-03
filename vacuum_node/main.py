@@ -30,7 +30,7 @@ from fairness import demographic_parity
 from model import predict
 from verify import check_constraint
 
-app = FastAPI(title="Vacuum Bridge Node", version="1.0.0")
+app = FastAPI(title="Vacuum Bridge Node", version="2.0.0")
 
 # Load peer configuration
 PEERS_FILE = Path(__file__).parent / "peers.json"

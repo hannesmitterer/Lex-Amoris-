@@ -39,7 +39,10 @@ def test_decision_endpoint(node_url):
 
         print(f"\n⚖️ Weighted Consensus:")
         weighted = result["certificate"]["weighted_result"]
-        print(f"  Best hash: {weighted['best_hash'][:16] if weighted['best_hash'] else 'None'}...")
+        best_hash_display = (
+            weighted['best_hash'][:16] + "..." if weighted['best_hash'] else "None"
+        )
+        print(f"  Best hash: {best_hash_display}")
         print(f"  Weights: {weighted['weights']}")
 
         print(f"\n✅ Status: {result['status']}")

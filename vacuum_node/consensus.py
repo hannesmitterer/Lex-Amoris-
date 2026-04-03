@@ -5,12 +5,17 @@ Implements:
 - Majority voting (tolerates divergent nodes)
 - Reputation-based weighted consensus
 - Append-only blockchain log
+
+Note: In production, REPUTATION and CHAIN should use thread-safe
+data structures or be backed by a database for multi-threaded safety.
+This implementation is suitable for demonstration and single-threaded testing.
 """
 import time
 from collections import Counter
 from typing import Any, Dict, List, Tuple
 
 # Reputation scores for nodes (1.0 = full trust)
+# TODO: In production, use thread-safe storage or database
 REPUTATION = {
     "http://node-a:8000": 1.0,
     "http://node-b:8000": 1.0,
@@ -21,6 +26,7 @@ REPUTATION = {
 }
 
 # Append-only blockchain-like log
+# TODO: In production, use thread-safe storage or database
 CHAIN: List[Dict[str, Any]] = []
 
 
