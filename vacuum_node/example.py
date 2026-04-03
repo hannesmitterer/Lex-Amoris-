@@ -6,7 +6,6 @@ Runs a single evaluation and shows all the components in action.
 import json
 
 import numpy as np
-
 from crypto import hash_result, sign_result, verify_signature
 from fairness import demographic_parity
 from model import predict

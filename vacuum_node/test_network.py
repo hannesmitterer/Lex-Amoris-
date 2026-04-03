@@ -9,6 +9,9 @@ import time
 
 import requests
 
+# Test data used across all tests
+TEST_DATA = {"features": [[0.2, 0.8], [0.9, 0.9], [0.1, 0.2], [0.7, 0.6]], "group": [0, 1, 0, 1]}
+
 
 def test_node_health(node_url):
     """Test node health endpoint."""
@@ -26,7 +29,7 @@ def test_node_health(node_url):
 def test_node_evaluate(node_url):
     """Test node evaluation endpoint."""
     print(f"\n🧮 Testing evaluate: {node_url}")
-    data = {"features": [[0.2, 0.8], [0.9, 0.9], [0.1, 0.2], [0.7, 0.6]], "group": [0, 1, 0, 1]}
+    data = TEST_DATA
 
     try:
         response = requests.post(f"{node_url}/evaluate", json=data, timeout=10)
@@ -67,7 +70,7 @@ def test_node_attest(node_url, result_data):
 def test_consensus(node_url):
     """Test consensus endpoint."""
     print(f"\n🤝 Testing consensus: {node_url}")
-    data = {"features": [[0.2, 0.8], [0.9, 0.9], [0.1, 0.2], [0.7, 0.6]], "group": [0, 1, 0, 1]}
+    data = TEST_DATA
 
     try:
         response = requests.post(f"{node_url}/consensus", json=data, timeout=30)

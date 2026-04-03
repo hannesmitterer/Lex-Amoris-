@@ -13,11 +13,18 @@ def demographic_parity(y_pred, group):
 
     Args:
         y_pred: Binary predictions array
-        group: Group membership array (0 or 1)
+        group: Group membership array (must contain only 0 or 1)
 
     Returns:
         Absolute disparity value
+
+    Raises:
+        ValueError: If group contains values other than 0 or 1
     """
+    unique_groups = np.unique(group)
+    if not np.all(np.isin(unique_groups, [0, 1])):
+        raise ValueError(f"Group must contain only 0 or 1, found: {unique_groups}")
+
     g0 = y_pred[group == 0]
     g1 = y_pred[group == 1]
 
