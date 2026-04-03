@@ -141,6 +141,17 @@ apk add jq
 - **Exit Code 0**: All checks passed
 - **Exit Code 1**: Failures detected (requires remediation)
 
+## Live Deployment
+
+🌐 **GitHub Pages**: [https://hannesmitterer.github.io/Lex-Amoris-/](https://hannesmitterer.github.io/Lex-Amoris-)
+
+The compliance framework is automatically deployed to GitHub Pages, providing:
+- Real-time compliance status dashboard
+- Publicly accessible compliance artifacts (JSON)
+- Complete documentation and verification procedures
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for deployment details and troubleshooting.
+
 ## Standards Compliance
 
 ### ETSI EN 319 612
