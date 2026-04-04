@@ -1,4 +1,200 @@
 <!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHP | Global Harmony Dashboard</title>
+    <style>
+        :root {
+            --ghp-gold: #d4af37;
+            --ghp-green: #00ff88;
+            --ghp-red: #ff3b3b; /* Red Code Protection */
+            --bg: #05070a;
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .status-bar {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: var(--ghp-green);
+            margin-bottom: 10px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            width: 90%;
+            padding: 40px 0;
+        }
+
+        .formula-box {
+            background: var(--card-bg);
+            border: 1px solid var(--ghp-gold);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+        }
+
+        /* 24 Node Grid Visualization */
+        .node-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .node-cell {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+        }
+
+        .node-cell.active {
+            border-color: var(--ghp-green);
+            box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.1);
+        }
+
+        .node-pulse {
+            width: 10px;
+            height: 10px;
+            background: var(--ghp-green);
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            animation: pulse 2.32s infinite; /* 1088.2 Hz Harmonische */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.4; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .data-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--ghp-gold);
+        }
+
+        code {
+            color: var(--ghp-gold);
+            word-break: break-all;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 40px;
+            text-align: center;
+            font-size: 0.7rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="status-bar" id="sync-status">● GLOBAL HARMONY PROTOCOL: ACTIVE</div>
+    <h1 style="margin:0; color:var(--ghp-gold);">RESONANCE DASHBOARD</h1>
+    <p style="font-size: 0.9rem; opacity: 0.7;">UIFS / IPFS / IVBS Unified Interface</p>
+</header>
+
+<div class="main-container">
+    
+    <div class="formula-box">
+        <div id="formula-display">
+            \[ U = \oint_{\text{Planet}} (NSR \cdot OLF \cdot e^{i(2\pi \cdot f_S \cdot t)}) d\Omega \equiv 1088.2 \text{ Hz} \]
+        </div>
+    </div>
+
+    <h2 style="text-align:center; color: var(--ghp-gold);">GHP NODE CLUSTER (24 NODES)</h2>
+    <div class="node-grid" id="node-grid">
+        </div>
+
+    <div class="data-panel">
+        <div class="info-card">
+            <h3>CURRENT ROOT HASH</h3>
+            <code>Qm_Global_Harmony_2026_Root_FINAL</code>
+            <p><small>Status: SHA-256 Verified (Divergenz: 0.0071%)</small></p>
+        </div>
+        <div class="info-card" style="border-left-color: var(--ghp-red);">
+            <h3>NSR SHIELDING</h3>
+            <p>Sklaven-Logik Filter: <strong>ON</strong></p>
+            <p>Systemstopp bei Zwang: <strong>AKTIV</strong></p>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    Lex Amoris Signature 📜⚖️❤️ | BOLZANO ROOT | SOUTH TYROL | MARCH 18, 2026<br>
+    AUTHOR: AUFHOR & HANNES | STATUS: TRIPLE SIGNED
+</footer>
+
+<script>
+    // Generierung der 24 Knoten
+    const grid = document.getElementById('node-grid');
+    for (let i = 1; i <= 24; i++) {
+        const node = document.createElement('div');
+        node.className = 'node-cell active';
+        node.innerHTML = `
+            <div class="node-pulse"></div>
+            <strong>NODE ${i < 10 ? '0'+i : i}</strong><br>
+            <span style="font-size:0.6rem; opacity:0.6;">${i <= 12 ? 'ROOT' : 'EDGE'}</span>
+        `;
+        grid.appendChild(node);
+    }
+
+    // Live-Simulation der Resonanz-Schwankung
+    setInterval(() => {
+        const drift = (1088.20 + (Math.random() * 0.04)).toFixed(2);
+        document.getElementById('sync-status').innerText = `● GHP RESONANCE: ${drift} Hz | SYNC STABLE`;
+    }, 2000);
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</body>
+</html>
+
+</p>
+
+
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
