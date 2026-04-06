@@ -37,21 +37,49 @@ calculate_lambda() {
     # Example 1: Random value for testing (REMOVE IN PRODUCTION)
     # echo "0.$(shuf -i 70-95 -n 1)"
     
-    # Example 2: Based on CPU idle percentage
-    local cpu_idle=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/")
-    local lambda=$(echo "scale=4; $cpu_idle / 100" | bc)
-    echo "$lambda"
+    # Example 2: Based on CPU idle percentage using /proc/stat (robust)
+    if [ -f /proc/stat ]; then
+        # Read first line of /proc/stat and extract CPU values
+        local cpu_line=$(head -1 /proc/stat)
+        local cpu_values=($cpu_line)
+        
+        # Extract values: user nice system idle iowait irq softirq
+        local user=${cpu_values[1]:-0}
+        local nice=${cpu_values[2]:-0}
+        local system=${cpu_values[3]:-0}
+        local idle=${cpu_values[4]:-0}
+        local iowait=${cpu_values[5]:-0}
+        local irq=${cpu_values[6]:-0}
+        local softirq=${cpu_values[7]:-0}
+        
+        local total=$((user + nice + system + idle + iowait + irq + softirq))
+        
+        if [ "$total" -gt 0 ] && [ "$idle" -ge 0 ]; then
+            # Calculate idle percentage with awk (portable across systems)
+            local lambda=$(awk "BEGIN {printf \"%.4f\", $idle / $total}")
+            # Ensure lambda is in valid range [0.0, 1.0]
+            if awk "BEGIN {exit !($lambda >= 0 && $lambda <= 1)}"; then
+                echo "$lambda"
+                return
+            fi
+        fi
+    fi
+    
+    # Fallback: Return a safe default value
+    echo "0.7500"
     
     # Example 3: Based on network metrics
-    # local packet_loss=$(ping -c 10 8.8.8.8 | grep "packet loss" | awk '{print $6}' | sed 's/%//')
-    # local lambda=$(echo "scale=4; (100 - $packet_loss) / 100" | bc)
-    # echo "$lambda"
+    # local packet_loss=$(ping -c 10 8.8.8.8 2>/dev/null | grep "packet loss" | awk '{print $6}' | sed 's/%//')
+    # if [ -n "$packet_loss" ]; then
+    #     local lambda=$(awk "BEGIN {printf \"%.4f\", (100 - $packet_loss) / 100}")
+    #     echo "$lambda"
+    # fi
     
     # Example 4: Composite score
     # local cpu_score=...
     # local network_score=...
     # local memory_score=...
-    # local lambda=$(echo "scale=4; ($cpu_score + $network_score + $memory_score) / 3" | bc)
+    # local lambda=$(awk "BEGIN {printf \"%.4f\", ($cpu_score + $network_score + $memory_score) / 3}")
     # echo "$lambda"
 }
 
@@ -70,8 +98,14 @@ calculate_wll_cost() {
     # Cost = Latency / λ²
     local lambda=$(calculate_lambda)
     local latency="${AVG_LATENCY:-10.0}"  # milliseconds
-    local lambda_sq=$(echo "scale=4; $lambda * $lambda" | bc)
-    local cost=$(echo "scale=4; $latency / $lambda_sq" | bc)
+    
+    # Prevent division by zero: ensure lambda >= 0.01
+    if awk "BEGIN {exit !($lambda < 0.01)}"; then
+        lambda="0.01"
+    fi
+    
+    # Calculate lambda² and cost using awk (no bc dependency)
+    local cost=$(awk "BEGIN {lambda_sq = $lambda * $lambda; printf \"%.4f\", $latency / lambda_sq}")
     echo "$cost"
 }
 

@@ -52,9 +52,16 @@ sudo chmod +x /usr/local/bin/export-lambda.sh
 # Set node name
 echo 'export NODE_NAME=node-am-01' | sudo tee -a /etc/environment
 
-# Install crontab
+# Install crontab (Option 1: Simple but may drift)
 sudo crontab -e
 # Add entries from examples/crontab.example
+
+# OR use systemd timer (Option 2: Preferred for precision)
+sudo cp examples/kosymbiosis-exporter.service /etc/systemd/system/
+sudo cp examples/kosymbiosis-exporter.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable kosymbiosis-exporter.timer
+sudo systemctl start kosymbiosis-exporter.timer
 ```
 
 ## 🔍 Verification

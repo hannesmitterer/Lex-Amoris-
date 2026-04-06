@@ -1,8 +1,17 @@
 # Example crontab entries for exporting lambda metrics every 15 seconds
 # Install with: crontab -e (as root or with sudo)
 
-# Export kosymbiosis_lambda metric 4 times per minute
+# Option 1: Simple cron-based approach (runs 4 times per minute)
+# Note: May drift slightly over time but simple and reliable
 * * * * * /usr/local/bin/export-lambda.sh
 * * * * * sleep 15; /usr/local/bin/export-lambda.sh
 * * * * * sleep 30; /usr/local/bin/export-lambda.sh
 * * * * * sleep 45; /usr/local/bin/export-lambda.sh
+
+# Option 2: More precise approach with internal loop (preferred)
+# Uncomment the line below and comment out the 4 lines above
+# * * * * * for i in 0 15 30 45; do [ $i -gt 0 ] && sleep $i; /usr/local/bin/export-lambda.sh; done &
+
+# Option 3: For systemd-based systems, consider using a systemd timer
+# See examples/kosymbiosis-exporter.timer and kosymbiosis-exporter.service
+# This provides the most precise scheduling with OnUnitActiveSec=15s

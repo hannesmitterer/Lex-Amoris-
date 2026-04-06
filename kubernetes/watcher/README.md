@@ -155,11 +155,19 @@ EOF
 
 Cronjob einrichten (alle 15 Sekunden):
 ```bash
+# Option 1: Traditional cron (simple but may drift)
 # In /etc/crontab
 * * * * * root /usr/local/bin/export-lambda.sh
 * * * * * root sleep 15; /usr/local/bin/export-lambda.sh
 * * * * * root sleep 30; /usr/local/bin/export-lambda.sh
 * * * * * root sleep 45; /usr/local/bin/export-lambda.sh
+
+# Option 2: Systemd timer (preferred for precision)
+sudo cp examples/kosymbiosis-exporter.service /etc/systemd/system/
+sudo cp examples/kosymbiosis-exporter.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable kosymbiosis-exporter.timer
+sudo systemctl start kosymbiosis-exporter.timer
 ```
 
 ## 🚨 Alert-Regeln

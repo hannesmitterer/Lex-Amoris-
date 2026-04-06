@@ -1,0 +1,15 @@
+# Systemd timer for precise 15-second interval metric export
+# Place in /etc/systemd/system/kosymbiosis-exporter.timer
+
+[Unit]
+Description=Kosymbiosis Lambda Metric Export Timer
+Requires=kosymbiosis-exporter.service
+
+[Timer]
+# Run every 15 seconds
+OnBootSec=15s
+OnUnitActiveSec=15s
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target
