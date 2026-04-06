@@ -59,6 +59,26 @@ tests/
 
 ---
 
+## Kosymbiosis Dashboard
+
+An interactive web dashboard visualizing the four foundational modules of the Lex Amoris framework:
+
+- 🌳 **Terra / Habitat** — Bio-construction with natural materials
+- 💧 **Acqua / Flusso** — AquaLibre Protocol for free water access
+- ☀️ **Fuoco / Luce** — Solar sovereignty and autonomous energy
+- 🌬️ **Aria / Verbo** — Truth propagation through resonant communication
+
+**Features:**
+- Real-time Schumann Resonance monitoring (7.83 Hz)
+- S-ROI (Sovereign Return on Investment) status
+- NSR (Non-Slavery Rule) firewall protection
+- IPFS anchoring for immutability
+- Seedbringer authentication link
+
+**Access:** [View Dashboard](https://hannesmitterer.github.io/Lex-Amoris-/dashboard.html)
+
+---
+
 ## Running Tests
 
 ```bash
