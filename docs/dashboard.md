@@ -1,7 +1,7 @@
 # Kosymbiosis Dashboard
 
 !!! info "Live Interactive Dashboard"
-    Access the full interactive dashboard at [dashboard.html](../dashboard.html).
+    The full interactive dashboard will be available at `/dashboard.html` after deployment.
 
 The **Kosymbiosis Dashboard** is the living interface for the Lex Amoris Framework, providing real-time visualization of the four foundational modules and system status.
 
