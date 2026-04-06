@@ -504,6 +504,12 @@ function loadModules(modules) {
         if (module) {
             const card = document.createElement('div');
             card.className = `module-card ${moduleClasses[index]}`;
+            const ipfsCID = module.ipfs_cid ? `
+                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(212, 175, 55, 0.2);">
+                    <div style="font-size: 0.7rem; opacity: 0.6; margin-bottom: 4px;">IPFS CID:</div>
+                    <code style="font-size: 0.75rem; color: var(--gold); word-break: break-all;">${module.ipfs_cid}</code>
+                </div>
+            ` : '';
             card.innerHTML = `
                 <div class="module-header">
                     <div class="module-title">${moduleIcons[index]} ${module.name}</div>
@@ -513,6 +519,7 @@ function loadModules(modules) {
                 <ul class="module-principles">
                     ${module.principles.map(p => `<li>${p}</li>`).join('')}
                 </ul>
+                ${ipfsCID}
             `;
             grid.appendChild(card);
         }
