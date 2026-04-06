@@ -1,0 +1,8 @@
+# Example crontab entries for exporting lambda metrics every 15 seconds
+# Install with: crontab -e (as root or with sudo)
+
+# Export kosymbiosis_lambda metric 4 times per minute
+* * * * * /usr/local/bin/export-lambda.sh
+* * * * * sleep 15; /usr/local/bin/export-lambda.sh
+* * * * * sleep 30; /usr/local/bin/export-lambda.sh
+* * * * * sleep 45; /usr/local/bin/export-lambda.sh
