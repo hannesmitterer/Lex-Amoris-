@@ -35,9 +35,8 @@ the Law of Love applied to quantum mechanics.
 
 import json
 import math
-from dataclasses import dataclass, asdict
-from typing import Dict, Any, Optional
-
+from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 # Constants
 SCHUMANN_FREQUENCY = 7.83  # Hz - Earth's resonance frequency
