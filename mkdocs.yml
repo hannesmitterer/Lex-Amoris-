@@ -33,6 +33,7 @@ theme:
 
 nav:
   - Home: index.md
+  - Kosymbiosis Dashboard: dashboard.md
   - Guide:
     - Core Principles: principles.md
     - The Framework: framework.md
