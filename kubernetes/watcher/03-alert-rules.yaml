@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: watcher-alert-rules
+  labels:
+    app: kosymbiosis-watcher
+    component: monitoring
+data:
+  alert.rules.yml: |
+    groups:
+      - name: kosymbiosis-sovranità
+        interval: 15s
+        rules:
+          # ═══════════════════════════════════════════════════════════
+          # Recording rules: Calculate μ (mean) and σ (stddev) for λ
+          # ═══════════════════════════════════════════════════════════
+          
+          # Average λ over 5-minute window
+          - record: node:lambda:avg
+            expr: avg_over_time(kosymbiosis_lambda[5m])
+          
+          # Standard deviation of λ over 5-minute window
+          - record: node:lambda:stddev
+            expr: stddev_over_time(kosymbiosis_lambda[5m])
+          
+          # Calculate μ - 2σ threshold (lower bound)
+          - record: node:lambda:lower_threshold
+            expr: node:lambda:avg - 2 * node:lambda:stddev
+          
+          # Calculate μ + 2σ threshold (upper bound)
+          - record: node:lambda:upper_threshold
+            expr: node:lambda:avg + 2 * node:lambda:stddev
+          
+          # ═══════════════════════════════════════════════════════════
+          # Alert rules: Detect anomalies in network coherence (λ)
+          # ═══════════════════════════════════════════════════════════
+          
+          # CRITICAL: λ drops below μ - 2σ
+          # Indicates potential sovereignty degradation
+          - alert: LambdaDropCritical
+            expr: kosymbiosis_lambda < (node:lambda:avg - 2 * node:lambda:stddev)
+            for: 30s
+            labels:
+              severity: critical
+              network: backbone
+              nsr_action: resonance_log
+            annotations:
+              summary: "λ di {{ $labels.node }} è sotto μ‑2σ"
+              description: |
+                Il valore λ è {{ $value | printf "%.4f" }}.
+                Media (μ): {{ $labels.node }} → Sotto soglia critica
+                Soglia inferiore (μ-2σ): {{ printf "node:lambda:lower_threshold{node='%s'}" $labels.node | query | first | value | printf "%.4f" }}
+                
+                🛡️ NSR Protocol:
+                  - Generare un Resonanz‑Log per tracciare l'evento
+                  - NON intervenire automaticamente sul flusso
+                  - Mantenere la sovranità decisionale umana
+                  - Monitorare per pattern di costrizione
+                
+                Possibili cause:
+                  - Sovraccarico del nodo
+                  - Degrado della connettività di rete
+                  - Potenziale tentativo di costrizione esterna
+          
+          # WARNING: λ exceeds μ + 2σ
+          # Indicates potential overload or anomalous activity
+          - alert: LambdaSpike
+            expr: kosymbiosis_lambda > (node:lambda:avg + 2 * node:lambda:stddev)
+            for: 30s
+            labels:
+              severity: warning
+              network: backbone
+              nsr_action: monitor
+            annotations:
+              summary: "λ di {{ $labels.node }} è sopra μ+2σ"
+              description: |
+                Il valore λ è {{ $value | printf "%.4f" }}.
+                Il nodo sta operando a λ molto alta.
+                Soglia superiore (μ+2σ): {{ printf "node:lambda:upper_threshold{node='%s'}" $labels.node | query | first | value | printf "%.4f" }}
+                
+                ⚠️ Azione richiesta:
+                  - Controllare eventuali colli di bottiglia
+                  - Verificare carico di lavoro del nodo
+                  - Valutare ridistribuzione traffico (WLL)
+                
+                Nota: Alta λ può indicare un hub sovrano efficiente,
+                ma deve essere sostenibile nel tempo.
+          
+          # INFO: Node is offline or unreachable
+          - alert: NodeUnreachable
+            expr: up{job="kosymbiosis-nodes"} == 0
+            for: 1m
+            labels:
+              severity: warning
+              network: backbone
+            annotations:
+              summary: "Nodo {{ $labels.instance }} non raggiungibile"
+              description: |
+                Il nodo {{ $labels.instance }} non risponde da 1 minuto.
+                
+                Verificare:
+                  - Connettività di rete
+                  - Stato del node_exporter
+                  - Salute del nodo fisico
+          
+          # CRITICAL: Hub node (λ > 0.85) degradation
+          - alert: HubNodeDegradation
+            expr: |
+              (kosymbiosis_lambda < 0.85) 
+              and on(node) (kosymbiosis_lambda offset 10m > 0.85)
+            for: 2m
+            labels:
+              severity: critical
+              network: backbone
+              node_type: hub
+            annotations:
+              summary: "Nodo hub {{ $labels.node }} degradato"
+              description: |
+                Il nodo hub {{ $labels.node }} è sceso sotto λ = 0.85
+                Valore attuale: {{ $value | printf "%.4f" }}
+                
+                🚨 Impatto critico:
+                  - Il nodo è un hub della rete sovrana
+                  - Il degrado può influenzare l'intero backbone
+                  - Attivare protocollo di failover WLL
+                
+                Azione: Reindirizzare traffico a nodi backup (N8)

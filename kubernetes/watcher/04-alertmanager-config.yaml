@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: watcher-alertmanager-config
+  labels:
+    app: kosymbiosis-watcher
+    component: monitoring
+data:
+  alertmanager.yml: |
+    global:
+      resolve_timeout: 5m
+    
+    # Template configuration
+    templates:
+      - '/etc/alertmanager/templates/*.tmpl'
+    
+    # Routing tree
+    route:
+      # Default receiver for all alerts
+      receiver: "log-receiver"
+      
+      # Group alerts by cluster, alertname, and node
+      group_by: ['cluster', 'alertname', 'node']
+      
+      # Wait time before sending notification for a group
+      group_wait: 30s
+      
+      # Time to wait before sending notification about new alerts
+      # that are added to a group of alerts for which initial notification
+      # has already been sent
+      group_interval: 5m
+      
+      # Time to wait before resending notification
+      repeat_interval: 4h
+      
+      # Child routes with specific routing logic
+      routes:
+        # Critical alerts - immediate notification
+        - match:
+            severity: critical
+          receiver: "log-receiver"
+          group_wait: 10s
+          repeat_interval: 1h
+        
+        # NSR-specific alerts - resonance logging
+        - match_re:
+            nsr_action: "(resonance_log|monitor)"
+          receiver: "log-receiver"
+          continue: true
+        
+        # Hub node degradation - priority routing
+        - match:
+            node_type: hub
+          receiver: "log-receiver"
+          group_wait: 5s
+          repeat_interval: 30m
+    
+    # Inhibition rules
+    inhibit_rules:
+      # Inhibit warning if critical alert is firing for same node
+      - source_match:
+          severity: 'critical'
+        target_match:
+          severity: 'warning'
+        equal: ['node', 'instance']
+    
+    # Receivers configuration
+    receivers:
+      # Main receiver - Hannes Resonance Logger
+      - name: "log-receiver"
+        webhook_configs:
+          - url: "http://hannes-resonance-logger.local/ingest"
+            send_resolved: true
+            http_config:
+              follow_redirects: true
+            max_alerts: 0  # Send all alerts
