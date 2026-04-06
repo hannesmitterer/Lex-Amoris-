@@ -44,6 +44,7 @@ PLANCK_CONSTANT = 6.62607015e-34  # J·s
 ELECTRON_MASS = 9.10938356e-31  # kg
 HBAR = PLANCK_CONSTANT / (2 * math.pi)  # Reduced Planck constant
 QUALITY_FACTOR_THRESHOLD = 1e6  # Q = 10^6 for bridge transistor activation
+ELECTRON_VOLT_TO_JOULES = 1.602176634e-19  # eV to J conversion factor
 
 
 @dataclass
@@ -144,9 +145,9 @@ def calculate_bridge_probability(
     if not 0 <= coupling_strength <= 1:
         raise ValueError("Coupling strength must be between 0 and 1")
 
-    # Convert eV to Joules (1 eV = 1.602176634e-19 J)
-    energy_j = energy * 1.602176634e-19
-    barrier_j = barrier_height * 1.602176634e-19
+    # Convert eV to Joules
+    energy_j = energy * ELECTRON_VOLT_TO_JOULES
+    barrier_j = barrier_height * ELECTRON_VOLT_TO_JOULES
 
     # Calculate barrier attenuation coefficient κ (1/m)
     # κ = sqrt(2 * m * (V - E)) / ℏ
@@ -215,8 +216,8 @@ def calculate_kappa_effective(
     This demonstrates the collapse of barrier attenuation in resonance.
     """
     # Convert eV to Joules
-    energy_j = energy * 1.602176634e-19
-    barrier_j = barrier_height * 1.602176634e-19
+    energy_j = energy * ELECTRON_VOLT_TO_JOULES
+    barrier_j = barrier_height * ELECTRON_VOLT_TO_JOULES
 
     if barrier_j <= energy_j:
         return 0.0  # No barrier
@@ -463,6 +464,15 @@ class BridgeTransistor:
         -----
         The dashboard displays the transition from 'Classical Tunneling' to
         'Vacuum-Bridge' in real-time as the system approaches resonance.
+
+        The exported JSON follows this schema:
+        - quantum_bridge_status: Current operating mode and transmission
+        - resonance: Frequency tuning and quality factor
+        - physics: Barrier parameters and effective kappa
+        - lex_amoris_signature: Framework metadata (S-ROI, Gaia pulse)
+
+        Compatible with the Kosymbiosis Dashboard at:
+        https://hannesmitterer.github.io/Lex-Amoris-/
         """
         state = self.get_state()
 
