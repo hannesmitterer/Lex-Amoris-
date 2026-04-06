@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: watcher-sidecar
+  labels:
+    app: kosymbiosis-watcher
+    component: monitoring
+    framework: lex-amoris
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kosymbiosis-watcher
+  template:
+    metadata:
+      labels:
+        app: kosymbiosis-watcher
+        component: monitoring
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.53.0
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus"
+            - "--web.enable-lifecycle"
+          ports:
+            - name: prometheus
+              containerPort: 9090
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+            - name: alert-rules
+              mountPath: /etc/prometheus/rules
+            - name: data
+              mountPath: /prometheus
+          livenessProbe:
+            httpGet:
+              path: /-/healthy
+              port: 9090
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+        - name: alertmanager
+          image: prom/alertmanager:v0.27.0
+          args:
+            - "--config.file=/etc/alertmanager/alertmanager.yml"
+            - "--storage.path=/alertmanager"
+          ports:
+            - name: alertmanager
+              containerPort: 9093
+              protocol: TCP
+          volumeMounts:
+            - name: alert-config
+              mountPath: /etc/alertmanager
+            - name: alert-data
+              mountPath: /alertmanager
+          livenessProbe:
+            httpGet:
+              path: /-/healthy
+              port: 9093
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: 9093
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+      volumes:
+        - name: config
+          configMap:
+            name: watcher-prometheus-config
+        - name: alert-rules
+          configMap:
+            name: watcher-alert-rules
+        - name: data
+          emptyDir: {}
+        - name: alert-config
+          configMap:
+            name: watcher-alertmanager-config
+        - name: alert-data
+          emptyDir: {}
