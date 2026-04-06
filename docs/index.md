@@ -1,5 +1,10 @@
 # Lex Amoris — Euystacio Framework
 
+!!! tip "Interactive Dashboard Available"
+    **[🚀 Launch Kosymbiosis Dashboard →](../dashboard.html)**
+    
+    Experience the live interface with real-time monitoring of the four foundational modules, Schumann Resonance (7.83 Hz), S-ROI status, and more.
+
 **Lex Amoris** (Latin: *Law of Love*) is an ethical and relational framework
 built on the principle that **authentic love** — understood as *willing the
 genuine good of the other* — is the foundational law governing meaningful human
