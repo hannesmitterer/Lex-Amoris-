@@ -17,7 +17,8 @@
     "status": "ACTIVE",
     "violations_detected": 0,
     "last_check": "2026-04-06T05:00:00Z",
-    "firewall_status": "ENGAGED"
+    "firewall_status": "ENGAGED",
+    "kernel_cid": "QmNSR144kLexAmorisGenesisBlock2026SovereignKernelV12"
   },
   "modules": {
     "terra_habitat": {
@@ -25,6 +26,7 @@
       "element": "Wood/Hemp",
       "status": "ACTIVE",
       "description": "Bio-construction with hemp and wood - sovereign habitat",
+      "ipfs_cid": "QmHempClayWoodKlimawallSassoLegacyBioArchAlpha2026",
       "principles": [
         "Use natural, renewable materials",
         "Create self-sufficient living spaces",
@@ -36,6 +38,7 @@
       "element": "Water",
       "status": "ACTIVE",
       "description": "AquaLibre Protocol - Free water for all life",
+      "ipfs_cid": "QmPureWaterSovereigntyMartinique01AquaLibreSystem001",
       "principles": [
         "Water is a fundamental right, not a commodity",
         "Distribute based on need, not profit",
@@ -47,6 +50,7 @@
       "element": "Fire/Light",
       "status": "ACTIVE",
       "description": "Solar sovereignty and autonomous energy",
+      "ipfs_cid": "QmSolarEnergyAutonomyOffGridKernelFuocoLuceV01",
       "principles": [
         "Off-grid solar energy systems",
         "Energy independence = sovereign autonomy",
@@ -58,6 +62,7 @@
       "element": "Air/Word",
       "status": "ACTIVE",
       "description": "Truth propagation through resonant communication",
+      "ipfs_cid": "QmSeedbringerGuideToNewEarthDailyGestiCostantiNSR01",
       "principles": [
         "Speak truth with clarity",
         "Communication aligned with Lex Amoris",
@@ -67,9 +72,11 @@
   },
   "ipfs_anchoring": {
     "enabled": true,
-    "last_anchor": "QmExampleHash123...",
+    "last_anchor": "QmNSR144kLexAmorisGenesisBlock2026SovereignKernelV12",
     "anchor_frequency": "every_significant_event",
-    "immutability_guarantee": "CRYPTOGRAPHIC"
+    "immutability_guarantee": "CRYPTOGRAPHIC",
+    "artifact_count": 6,
+    "artifact_file": "ipfs-anchoring.json"
   },
   "seedbringer_link": {
     "authenticated": true,
