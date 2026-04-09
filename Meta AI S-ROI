@@ -1,0 +1,56 @@
+┌───────────────────────────────┐
+│       CLI / run.py            │
+│  (nodes_range, job, watchdog)│
+└──────────────┬────────────────┘
+               │
+               ▼
+┌───────────────────────────────┐
+│      Load SROISettings        │
+│  (pydantic validation of      │
+│   manifests, nodes, namespace)│
+└──────────────┬────────────────┘
+               │
+               ▼
+┌───────────────────────────────┐
+│       K8sHelper (k8s.py)     │
+│  - Apply Job manifest         │
+│  - Apply Watchdog manifest    │
+└──────────────┬────────────────┘
+               │
+               ▼
+┌───────────────────────────────┐
+│   Wait for Watchdog Pods      │
+│  (label selector, readiness) │
+└──────────────┬────────────────┘
+               │
+               ▼
+┌───────────────────────────────┐
+│   Generate Raw Patterns       │
+│  (one positive pattern/node)  │
+└──────────────┬────────────────┘
+               │
+               ▼
+┌───────────────────────────────┐
+│   Apply Lex Amoris Filter     │
+│  (ethical checks, corrections)│
+└──────────────┬────────────────┘
+               │
+               ▼
+┌───────────────────────────────┐
+│   Cross-link Patterns         │
+│  (full mesh, ∞ SROI multiplier)│
+└──────────────┬────────────────┘
+               │
+               ▼
+┌───────────────────────────────┐
+│  Wait for Node Readiness      │
+│  (simulate flag check)        │
+└──────────────┬────────────────┘
+               │
+               ▼
+┌───────────────────────────────┐
+│  Phase 3 Report / Logging     │
+│  - Node patterns & links      │
+│  - SROI multipliers           │
+│  - Structured, colored logs   │
+└───────────────────────────────┘
