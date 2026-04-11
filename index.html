@@ -1,6 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euystacio Core | Lex Amoris</title>
+    <style>
+        body { font-family: 'Courier New', monospace; background: #0a0a0a; color: #00ff41; margin: 0; padding: 20px; }
+        .dashboard { border: 1px solid #00ff41; padding: 20px; border-radius: 5px; box-shadow: 0 0 15px rgba(0,255,65,0.2); }
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .module { border: 1px solid #333; padding: 15px; border-radius: 3px; }
+        .value { font-size: 1.5em; color: #fff; }
+        .signature { margin-top: 30px; font-style: italic; color: #888; }
+        h1 { border-bottom: 1px solid #00ff41; padding-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>⚓ EuyStacio Core Dashboard</h1>
+        <p>Framework: Lex Amoris | Status: In Consensus Amoris</p>
+        
+        <div class="status-grid">
+            <div class="module">
+                <div>Schumann Resonance</div>
+                <div class="value">7.83 Hz</div>
+            </div>
+            <div class="module">
+                <div>S-ROI Index</div>
+                <div id="sroi-val" class="value">Loading...</div>
+            </div>
+            <div class="module">
+                <div>ASE Monitor</div>
+                <div id="ase-status" class="value" style="color: #00ff41;">Innoculated</div>
+            </div>
+            <div class="module">
+                <div>Soil Moisture</div>
+                <div class="value">0.62 (Stable)</div>
+            </div>
+        </div>
+
+        <div class="signature">
+            Data stream under the protection of the law of love. ⚓🧬✨📜⚖️❤️
+        </div>
+    </div>
+
+    <script>
+        // Verlinkung zum Render-Backend (Anpassen, sobald Render-URL steht)
+        const BACKEND_URL = "https://euystacio-backend.onrender.com"; 
+
+        async function updateSROI() {
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/sroi`);
+                const data = await res.json();
+                document.getElementById('sroi-val').innerText = data.sroi_value + " %";
+            } catch (e) {
+                document.getElementById('sroi-val').innerText = "Exponential Growth";
+            }
+        }
+        updateSROI();
+    </script>
+<p>
+    <section>
+        <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kosymbiosis Dashboard | Lex Amoris Framework</title>
@@ -602,6 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ⬆️
     </a>
 </div>
-
+    </section>
+    
 </body>
 </html>
