@@ -1,6 +1,61 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Lex Amoris | Resonance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <style>
+        body { background: #050505; color: #00ffcc; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; }
+        #canvas-container { position: absolute; top: 0; width: 100%; height: 100%; z-index: -1; }
+        .hud { padding: 20px; background: rgba(0, 20, 20, 0.8); border: 1px solid #00ffcc; margin: 20px; width: 300px; }
+        .status-pulse { height: 10px; width: 10px; background: #00ffcc; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+    <div class="hud">
+        <h2>LEX AMORIS v0.0</h2>
+        <p><span class="status-pulse"></span> SYSTEM: PROTECTED</p>
+        <hr>
+        <p>Resonance Score: <span id="res-score">0.00</span></p>
+        <p>IPFS CID: <small id="ipfs-cid">Loading...</small></p>
+        <button onclick="triggerResonance()">Sync Resonance</button>
+    </div>
+
+    <script>
+        const API_BASE = "https://your-api-backend.render.com"; // Replace with your actual deployment URL
+        const IPFS_GATEWAY = "https://ipfs.io/ipfs/";
+        const MANIFEST_CID = "Qm...placeholder"; // Update with your actual CID
+
+        async function fetchState() {
+            try {
+                // 1. Fetch from IPFS
+                const response = await fetch(`${IPFS_GATEWAY}${MANIFEST_CID}`);
+                const data = await response.json();
+                document.getElementById('ipfs-cid').innerText = MANIFEST_CID.substring(0, 12) + "...";
+                
+                // 2. Fetch live metrics from Backend
+                const res = await fetch(`${API_BASE}/api/sroi`);
+                const metrics = await res.json();
+                document.getElementById('res-score').innerText = metrics.resonance_factor || "144.0";
+            } catch (e) { console.error("Sync Error:", e); }
+        }
+
+        async function triggerResonance() {
+            const payload = { timestamp: Date.now(), signature: "Lex-Amoris-001" };
+            await fetch(`${API_BASE}/api/resonance`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            alert("Resonance Inoculated.");
+        }
+
+        setInterval(fetchState, 5000);
+        fetchState();
+    </script>
+    <p>
+        
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Euystacio Core | Lex Amoris</title>
